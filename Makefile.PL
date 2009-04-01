@@ -1,0 +1,17 @@
+use strict;
+use inc::Module::Install;
+name 'POE-Component-Client-Whois';
+author 'Chris Williams <chris@bingosnet.co.uk>';
+license 'perl';
+version_from 'lib/POE/Component/Client/Whois.pm';
+abstract_from 'lib/POE/Component/Client/Whois.pm';
+build_requires 'Test::More' => 0.47;
+requires 'warnings::compat' => 0 if $] < 5.006;
+requires 'Carp'   => 0;
+requires 'Socket' => 0;
+requires 'POE'    => 0.38;
+requires 'POE::Filter::Line' => 0;
+requires 'POE::Wheel::ReadWrite' => 0;
+requires 'POE::Wheel::SocketFactory' => 0;
+requires 'Net::Netmask' => 1.9012;
+WriteAll();

@@ -1,0 +1,11 @@
+POE::Component::Client::Whois
+=============================
+
+unpack distribution
+cd into distribution folder
+
+  perl Makefile.PL
+  make && make test
+  su 
+  make install
+
