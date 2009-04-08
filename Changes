@@ -1,6 +1,9 @@
 POE::Component::Client::Whois ChangeLOG
 =======================================
 
+1.20	Wed Apr  8 21:21:41 BST 2009
+	- Auto set repository in META.yml
+	- Adjust some of the tests to try and track down the fails
 1.18	Tue Aug 19 14:17:21 BST 2008
 	- Added .eu whois server to TLDList.pm
 
