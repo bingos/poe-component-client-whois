@@ -9,7 +9,7 @@ use POE::Component::Client::Whois::TLDList;
 use POE::Component::Client::Whois::IPBlks;
 use vars qw($VERSION);
 
-$VERSION = '1.20';
+$VERSION = '1.22';
 
 sub whois {
   my $package = shift;
@@ -43,6 +43,15 @@ sub whois {
 		last SWITCH;
 	  }
 	  $whois_server = ( $tld->tld( $args{query} ) )[0];
+    if ( $whois_server eq 'ARPA' ) {
+      $args{query} =~ s/\.in-addr\.arpa//;
+      $args{query} = join '.', reverse split(/\./,$args{query});
+		  $whois_server = ( $blk->get_server( $args{query} ) )[0];
+		  unless ( $whois_server ) {
+			  warn "Couldn\'t determine correct whois server, falling back on arin\n";
+			  $whois_server = 'whois.arin.net';
+		  }
+    }
 	  unless ( $whois_server ) {
 		warn "Could not automagically determine whois server from query string, defaulting to internic \n";
 		$whois_server = 'whois.internic.net';
@@ -74,6 +83,7 @@ sub _start {
 
 sub _connect {
   my ($kernel,$self) = @_[KERNEL,OBJECT];
+  # Check here for NONE or WEB and send an error straight away.
   $self->{factory} = POE::Wheel::SocketFactory->new(
 	SocketDomain   => AF_INET,
 	SocketType     => SOCK_STREAM,
@@ -222,7 +232,7 @@ domains, whois.arin.net for IPv4 addresses and whois.6bone.net for IPv6  address
 
 =over
 
-=item whois
+=item C<whois>
 
 Creates a POE::Component::Client::Whois session. Takes two mandatory arguments and a number of optional:
 
@@ -252,13 +262,13 @@ No parsing is undertaken on the returned data, this is an exercise left to the r
 
 =head1 AUTHOR
 
-Chris "BinGOs" Williams <chris@bingosnet.co.uk>
+Chris C<BinGOs> Williams <chris@bingosnet.co.uk>
 
 This module is based on the linux whois client from L<http://www.linux.it/~md/software/>.
 
 =head1 LICENSE
 
-Copyright L<(c)> Chris Williams
+Copyright E<copy> Chris Williams
 
 This module may be used, modified, and distributed under the same terms as Perl itself. Please see the license that came with your Perl distribution for details.
 

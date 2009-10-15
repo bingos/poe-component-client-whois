@@ -5,7 +5,7 @@ use warnings;
 use Net::Netmask;
 use vars qw($VERSION);
 
-$VERSION = '1.20';
+$VERSION = '1.22';
 
 sub new {
   my $self = bless { }, shift;
@@ -209,7 +209,7 @@ POE::Component::Client::Whois::IPBlks provides the ability to determine which wh
 
 =over
 
-=item new
+=item C<new>
 
 Returns a POE::Component::Client::Whois::IPBlks object.
 
@@ -219,7 +219,7 @@ Returns a POE::Component::Client::Whois::IPBlks object.
 
 =over
 
-=item get_server
+=item C<get_server>
 
 Takes a single argument, an IP address to lookup the Whois for. Returns the applicable whois server or undef on failure.
 
@@ -227,11 +227,11 @@ Takes a single argument, an IP address to lookup the Whois for. Returns the appl
 
 =head1 AUTHOR
 
-Chris 'BinGOs' Williams
+Chris C<BinGOs> Williams
 
 =head1 LICENSE
 
-Copyright C<(c)> Chris Williams
+Copyright E<copy> Chris Williams
 
 This module may be used, modified, and distributed under the same terms as Perl itself. Please see the license that came with your Perl distribution for details.
 

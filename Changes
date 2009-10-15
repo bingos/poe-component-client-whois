@@ -1,6 +1,10 @@
 POE::Component::Client::Whois ChangeLOG
 =======================================
 
+1.22  Thu Oct 15 11:28:17 BST 2009
+  - Refactoring of the TLD lookups
+  - Updated TLD lists
+
 1.20	Wed Apr  8 21:21:41 BST 2009
 	- Auto set repository in META.yml
 	- Adjust some of the tests to try and track down the fails

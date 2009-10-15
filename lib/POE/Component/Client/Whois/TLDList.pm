@@ -5,1046 +5,1131 @@ use warnings;
 use Data::Dumper;
 use vars qw($VERSION);
 
-$VERSION = '1.20';
+$VERSION = '1.22';
 
 my %data = (
-                             '.cy' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.cy'
-                                      ],
-                             '.su' => [
-                                        'whois.ripn.net'
-                                      ],
-                             '.nz' => [
-                                        'whois.domainz.net.nz'
-                                      ],
-                             '.in' => [
-                                        'whois.ncst.ernet.in'
-                                      ],
-                             '.ni' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.ni'
-                                      ],
-                             '.la' => [
-                                        'whois.nic.la'
-                                      ],
-                             '.co.za' => [
-                                           'WEB',
-                                           'http://whois.co.za/'
-                                         ],
-                             '.sv' => [
-                                        'WEB',
-                                        'http://www.uca.edu.sv/dns/',
-                                        '#',
-                                        'http://www.svnet.org.sv/'
-                                      ],
-                             '.pm' => [
-                                        'whois.nic.fr'
-                                      ],
-                             '.ar' => [
-                                        'WEB',
-                                        'http://www.nic.ar/consultas/consdom.htm'
-                                      ],
-                             '.ng' => [
-                                        'whois.rg.net'
-                                      ],
-                             '.ae' => [
-                                        'WEB',
-                                        'http://cc.emirates.net.ae/Customer_care/cc_card/check_domains.choose_domains/'
-                                      ],
-                             '-nicat' => [
-                                           'whois.nic.at'
-                                         ],
-                             '.tt' => [
-                                        'WEB',
-                                        'http://www.nic.tt/cgi-bin/whois.cgi'
-                                      ],
-                             '-dk' => [
-                                        'whois.dk-hostmaster.dk'
-                                      ],
-                             '.mp' => [
-                                        'NONE',
-                                        '#',
-                                        'www.marketplace.mp'
-                                      ],
-                             '.info' => [
-                                          'whois.afilias.info'
-                                        ],
-                             '.ws' => [
-                                        'whois.samoanic.ws'
-                                      ],
-                             '.gov.uk' => [
-                                            'whois.ja.net'
-                                          ],
-                             '.pw' => [
-                                        'whois.nic.pw'
-                                      ],
-                             '.no.com' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '.au' => [
-                                        'whois.aunic.net'
-                                      ],
-                             '.je' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.isles.net'
-                                      ],
-                             '.gr' => [
-                                        'WEB',
-                                        'http://www.hostmaster.gr/cgi-bin/webwhois'
-                                      ],
-                             '.az' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.az'
-                                      ],
-                             '.se.net' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '.uk.net' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '.vi' => [
-                                        'WEB',
-                                        'http://208.30.96.227/whoisform.htm'
-                                      ],
-                             '.ad' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.ad'
-                                      ],
-                             '-arin' => [
-                                          'whois.arin.net'
-                                        ],
-                             '.ua' => [
-                                        'whois.com.ua'
-                                      ],
-                             '.gov' => [
-                                         'whois.nic.gov'
-                                       ],
-                             '.lk' => [
-                                        'whois.nic.lk'
-                                      ],
-                             '.do' => [
-                                        'WEB',
-                                        'http://www.nic.do'
-                                      ],
-                             '.ls' => [
-                                        'NONE'
-                                      ],
-                             '.tw' => [
-                                        'whois.twnic.net'
-                                      ],
-                             '.nc' => [
-                                        'whois.cctld.nc'
-                                      ],
-                             '.sk' => [
-                                        'whois.ripe.net'
-                                      ],
-                             '.bm' => [
-                                        'WEB',
-                                        'http://www.bermudanic.bm/cgi-bin/BermudaNIC/rwhois_query.pl',
-                                        '#',
-                                        'rwhois.bermudanic.bm:4321'
-                                      ],
-                             '-norid' => [
-                                           'whois.norid.no'
-                                         ],
-                             '.gg' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.isles.net'
-                                      ],
-                             '.cd' => [
-                                        'whois.nic.cd'
-                                      ],
-                             '.lv' => [
-                                        'whois.ripe.net'
-                                      ],
-                             '.kg' => [
-                                        'whois.domain.kg'
-                                      ],
-                             '.fk' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.fidc.org.fk/domain-registration/home.htm'
-                                      ],
-                             '.vc' => [
-                                        'whois.opensrs.net'
-                                      ],
-                             '.so' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.so',
-                                        '-',
-                                        'no',
-                                        'country,',
-                                        'no',
-                                        'NIC'
-                                      ],
-                             '.an' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.una.net/an_domreg/'
-                                      ],
-                             '.sh' => [
-                                        'whois.nic.sh'
-                                      ],
-                             '.ee' => [
-                                        'whois.eenet.ee'
-                                      ],
-                             '.pg' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.unitech.ac.pg/Unitech_General/ITS/ITS_Dns.htm'
-                                      ],
-                             '.md' => [
-                                        'WEB',
-                                        'http://www.nic.md/search.html'
-                                      ],
-                             '.bs' => [
-                                        'WEB',
-                                        'http://www.nic.bs/cgi-bin/search.pl'
-                                      ],
-                             '.ac.za' => [
-                                           'whois.ac.za'
-                                         ],
-                             '.fo' => [
-                                        'whois.ripe.net',
-                                        '#',
-                                        'www.nic.fo'
-                                      ],
-                             '.uk.co' => [
-                                           'whois.uk.co'
-                                         ],
-                             '.us' => [
-                                        'NONE',
-                                        '#',
-                                        'for',
-                                        'info:',
-                                        'usdomreg@nic.us'
-                                      ],
-                             '.cn' => [
-                                        'whois.cnnic.net.cn'
-                                      ],
-                             '.tp' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.tp'
-                                      ],
-                             '.bz' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.nz'
-                                      ],
-                             '.tm' => [
-                                        'whois.nic.tm'
-                                      ],
-                             '.zm' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.zamnet.zm/domain.shtml'
-                                      ],
-			     '.eu' => [
-					'whois.eu'
-				      ],
-                             '.br.com' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '.eu.com' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '.biz' => [
-                                         'whois.nic.biz'
-                                       ],
-                             '-au-dom' => [
-                                            'whois.aunic.net'
-                                          ],
-                             '.qc.com' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '.ai' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.offshore.com.ai/domain_names/'
-                                      ],
-                             '-metu' => [
-                                          'whois.metu.edu.tr'
-                                        ],
-                             '.rw' => [
-                                        'WEB',
-                                        'http://www.nic.rw/cgi-bin/whoisrw.pl'
-                                      ],
-                             '.mo' => [
-                                        'WEB',
-                                        'http://www.monic.net.mo',
-                                        '#',
-                                        'whois.umac.mo'
-                                      ],
-                             '.nu' => [
-                                        'whois.nic.nu'
-                                      ],
-                             '.yu' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.yu'
-                                      ],
-                             '.pro' => [
-                                         'whois.nic.pro'
-                                       ],
-                             '.aq' => [
-                                        'NONE',
-                                        '#',
-                                        '2day.com'
-                                      ],
-                             '.com' => [
-                                         'whois.internic.net'
-                                       ],
-                             '.dj' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.dj',
-                                        '(NOT',
-                                        'YET)'
-                                      ],
-                             '-itnic' => [
-                                           'whois.nic.it'
-                                         ],
-                             '.na' => [
-                                        'WEB',
-                                        'http://www.lisse.na/cgi-bin/whois.cgi'
-                                      ],
-                             '.vu' => [
-                                        'WEB',
-                                        'http://www.vunic.vu/whois'
-                                      ],
-                             '.st' => [
-                                        'whois.nic.st'
-                                      ],
-                             '.sz' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.iafrica.sz/domreg/'
-                                      ],
-                             '.aero' => [
-                                          'whois.nic.aero'
-                                        ],
-                             '.coop' => [
-                                          'whois.nic.coop'
-                                        ],
-                             '.ps' => [
-                                        'WEB',
-                                        'http://www.nic.ps/whois/'
-                                      ],
-                             '.ms' => [
-                                        'whois.adamsnames.tc'
-                                      ],
-                             '.be' => [
-                                        'whois.dns.be'
-                                      ],
-                             '.pa' => [
-                                        'WEB',
-                                        'http://www.nic.pa'
-                                      ],
-                             '.ac.cn' => [
-                                           'whois.cnc.ac.cn'
-                                         ],
-                             '.fj' => [
-                                        'whois.usp.ac.fj'
-                                      ],
-                             '.th' => [
-                                        'whois.thnic.net'
-                                      ],
-                             '-hst' => [
-                                         'whois.networksolutions.com'
-                                       ],
-                             '.name' => [
-                                          'whois.nic.name'
-                                        ],
-                             '.hr' => [
-                                        'WEB',
-                                        'http://noc.srce.hr/web-eng/searchdomain.htm'
-                                      ],
-                             '.cz' => [
-                                        'whois.nic.cz'
-                                      ],
-                             '.gi' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.gibnet.gi/nic/'
-                                      ],
-                             '.tg' => [
-                                        'WEB',
-                                        'http://www.nic.tg'
-                                      ],
-                             '.lu' => [
-                                        'whois.restena.lu'
-                                      ],
-                             '.cc' => [
-                                        'whois.nic.cc'
-                                      ],
-                             '-ripn' => [
-                                          'whois.ripn.net'
-                                        ],
-                             '.tv' => [
-                                        'NONE',
-                                        '#',
-                                        'http://internet.tv'
-                                      ],
-                             '.ao' => [
-                                        'NONE',
-                                        '#',
-                                        'www.dns.ao'
-                                      ],
-                             '.mu' => [
-                                        'WEB',
-                                        'http://www.nic.mu/cgi-bin/mu_whois.cgi'
-                                      ],
-                             '.za.com' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '.bd' => [
-                                        'NONE',
-                                        '#',
-                                        'NIC?'
-                                      ],
-                             '.mn' => [
-                                        'WEB',
-                                        'http://whois.nic.mn'
-                                      ],
-                             '.hn' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.hn'
-                                      ],
-                             '.pr' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.uprr.pr/main.html'
-                                      ],
-                             '-cn' => [
-                                        'whois.cnnic.net.cn'
-                                      ],
-                             '.by' => [
-                                        'WEB',
-                                        'http://www.tld.by/indexeng.html'
-                                      ],
-                             '-sgnic' => [
-                                           'whois.nic.net.sg'
-                                         ],
-                             '.it' => [
-                                        'whois.nic.it'
-                                      ],
-                             '.um' => [
-                                        'NONE',
-                                        '#',
-                                        'see',
-                                        '.us'
-                                      ],
-                             '.ch' => [
-                                        'whois.nic.ch'
-                                      ],
-                             '.cm' => [
-                                        'NONE',
-                                        '#',
-                                        'http://info.intelcam.cm'
-                                      ],
-                             '.al' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.inima.al/Domains.html'
-                                      ],
-                             '.mr' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.univ-nkc.mr/nic_mr.html'
-                                      ],
-                             '.ci' => [
-                                        'www.nic.ci'
-                                      ],
-                             '.gl' => [
-                                        'whois.ripe.net'
-                                      ],
-                             '.lr' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.psg.com/dns/lr/'
-                                      ],
-                             '.bt' => [
-                                        'whois.nic.tm'
-                                      ],
-                             '-mnt' => [
-                                         'whois.ripe.net'
-                                       ],
-                             '.tn' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.ati.tn/Nic/'
-                                      ],
-                             '.im' => [
-                                        'WEB',
-                                        'http://www.nic.im/exist.html'
-                                      ],
-                             '.cl' => [
-                                        'whois.nic.cl'
-                                      ],
-                             '.ly' => [
-                                        'WEB',
-                                        'http://www.lydomains.com/whois.asp'
-                                      ],
-                             '.gu' => [
-                                        'WEB',
-                                        'http://gadao.gov.gu/Scripts/wwsquery/wwsquery.dll?hois=guamquery'
-                                      ],
-                             '.fed.us' => [
-                                            'whois.nic.gov'
-                                          ],
-                             '.sj' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.uninett.no/navn/bv-sj.html'
-                                      ],
-                             '-frnic' => [
-                                           'whois.nic.fr'
-                                         ],
-                             '.edu' => [
-                                         'whois.educause.net'
-                                       ],
-                             '-org' => [
-                                         'whois.networksolutions.com'
-                                       ],
-                             '.cx' => [
-                                        'whois.nic.cx'
-                                      ],
-                             '.kh' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.mptc.gov.kh/Reculation/DNS.htm'
-                                      ],
-                             '.mil' => [
-                                         'whois.nic.mil'
-                                       ],
-                             '.dz' => [
-                                        'NONE'
-                                      ],
-                             '.ru' => [
-                                        'whois.ripn.net'
-                                      ],
-                             '.ug' => [
-                                        'www.registry.co.ug'
-                                      ],
-                             '.kz' => [
-                                        'whois.domain.kz'
-                                      ],
-                             '.mg' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.mg'
-                                      ],
-                             '.int' => [
-                                         'whois.icann.org'
-                                       ],
-                             '.ba' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.utic.net.ba/domen/'
-                                      ],
-                             '.km' => [
-                                        'NONE',
-                                        '#',
-                                        'NO',
-                                        'NIC'
-                                      ],
-                             '.sr' => [
-                                        'whois.register.sr'
-                                      ],
-                             '.vg' => [
-                                        'whois.adamsnames.tc'
-                                      ],
-                             '-dom' => [
-                                         'whois.networksolutions.com'
-                                       ],
-                             '.tc' => [
-                                        'whois.adamsnames.tc'
-                                      ],
-                             '.tz' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.psg.com/dns/tz/'
-                                      ],
-                             '.at' => [
-                                        'whois.aco.net'
-                                      ],
-                             '.bg' => [
-                                        'whois.ripe.net'
-                                      ],
-                             '.lb' => [
-                                        'WEB',
-                                        'http://www.aub.edu.lb/lbdr/search.html'
-                                      ],
-                             '.mc' => [
-                                        'whois.ripe.net'
-                                      ],
-                             '.tr' => [
-                                        'whois.metu.edu.tr'
-                                      ],
-                             '.co' => [
-                                        'WEB',
-                                        'http://daimon.uniandes.edu.co:8890/dominio/plsql/PConsulta.ConsultarDominio'
-                                      ],
-                             '.mx' => [
-                                        'whois.nic.mx'
-                                      ],
-                             '.es' => [
-                                        'WEB',
-                                        'http://www.nic.es/whois/'
-                                      ],
-                             '.fi' => [
-                                        'WEB',
-                                        'http://cgi.ficora.fi/wwwbin/domains.pl?language=eng'
-                                      ],
-                             '.ve' => [
-                                        'WEB',
-                                        'http://www.nic.ve/nicwho01.html',
-                                        '#',
-                                        'rwhois.reacciun.ve:4321'
-                                      ],
-                             '.org' => [
-                                         'whois.publicinterestregistry.net'
-                                       ],
-                             '.sn' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.sn'
-                                      ],
-                             '.sc' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.sc'
-                                      ],
-                             '.uk.com' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '.bo' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.bo'
-                                      ],
-                             '.ec' => [
-                                        'WEB',
-                                        'http://www.nic.ec'
-                                      ],
-                             '.qa' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.qatar.net.qa/services/virtual.htm'
-                                      ],
-                             '.dk' => [
-                                        'WEB',
-                                        'http://www.dk-hostmaster.dk/dkwhois.php?lang=eng'
-                                      ],
-                             '.cn.com' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '.kw' => [
-                                        'WEB',
-                                        'http://www.domainname.net.kw'
-                                      ],
-                             '.tk' => [
-                                        'NONE',
-                                        '#',
-                                        '2day.com'
-                                      ],
-                             '.va' => [
-                                        'whois.ripe.net'
-                                      ],
-                             '.kr' => [
-                                        'whois.krnic.net'
-                                      ],
-                             '.vn' => [
-                                        'WEB',
-                                        'http://www.vnnic.net.vn/english/reg_domain/'
-                                      ],
-                             '.net' => [
-                                         'whois.internic.net'
-                                       ],
-                             '.pn' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.pn'
-                                      ],
-                             '.cg' => [
-                                        'WEB',
-                                        'http://www.nic.cg/cgi-bin/whoiscg.pl'
-                                      ],
-                             '.hk' => [
-                                        'whois.hkdnr.net.hk'
-                                      ],
-                             '.mm' => [
-                                        'whois.nic.mm'
-                                      ],
-                             '.ro' => [
-                                        'whois.rotld.ro'
-                                      ],
-                             '.gm' => [
-                                        'whois.ripe.net',
-                                        '#',
-                                        'www.nic.gm'
-                                      ],
-                             '.sg' => [
-                                        'whois.nic.net.sg'
-                                      ],
-                             '-lrms' => [
-                                          'whois.afilias.net'
-                                        ],
-                             '.ck' => [
-                                        'whois.nic.ck'
-                                      ],
-                             '.ac' => [
-                                        'whois.nic.ac'
-                                      ],
-                             '.zr' => [
-                                        'NONE',
-                                        '#',
-                                        'obsoleted',
-                                        'by',
-                                        'cd'
-                                      ],
-                             '.fm' => [
-                                        'WEB',
-                                        'http://www.nic.fm/register.html'
-                                      ],
-                             '.gb.com' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '.py' => [
-                                        'WEB',
-                                        'http://www.nic.py/consultas/'
-                                      ],
-                             '.tf' => [
-                                        'whois.adamsnames.tc'
-                                      ],
-                             '.net.au' => [
-                                            'whois.connect.com.au'
-                                          ],
-                             '.ke' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.nbnet.co.ke/domain.htm'
-                                      ],
-                             '.ca' => [
-                                        'whois.cira.ca'
-                                      ],
-                             '.za' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www2.frd.ac.za/uninet/zadomains.html'
-                                      ],
-                             '.ge' => [
-                                        'WEB',
-                                        'http://www.nic.net.ge'
-                                      ],
-                             '.jp' => [
-                                        'whois.nic.ad.jp'
-                                      ],
-                             '.id' => [
-                                        'whois.idnic.net.id'
-                                      ],
-                             '.bb' => [
-                                        'WEB',
-                                        'http://domains.org.bb/regsearch/'
-                                      ],
-                             '-tw' => [
-                                        'whois.twnic.net'
-                                      ],
-                             '.hu.com' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '.tj' => [
-                                        'whois.nic.tj'
-                                      ],
-                             '.cu' => [
-                                        'WEB',
-                                        'http://www.nic.cu/consultas/consult.html'
-                                      ],
-                             '-il' => [
-                                        'whois.isoc.org.il'
-                                      ],
-                             '.gt' => [
-                                        'WEB',
-                                        'http://www.gt/whois.htm'
-                                      ],
-                             '.gb' => [
-                                        'NONE'
-                                      ],
-                             '.fr' => [
-                                        'whois.nic.fr'
-                                      ],
-                             '.gb.net' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '.ky' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.ky'
-                                      ],
-                             '.bv' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.uninett.no/navn/bv-sj.html'
-                                      ],
-                             '.mw' => [
-                                        'WEB',
-                                        'http://www.tarsus.net/whois/'
-                                      ],
-                             '.af' => [
-                                        'NONE',
-                                        '#',
-                                        'was',
-                                        'whois.nic.af'
-                                      ],
-                             '.no' => [
-                                        'whois.norid.no'
-                                      ],
-                             '.to' => [
-                                        'whois.tonic.to'
-                                      ],
-                             '-is' => [
-                                        'whois.isnet.is'
-                                      ],
-                             '.as' => [
-                                        'whois.nic.as'
-                                      ],
-                             '.se.com' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '-6bone' => [
-                                           'whois.6bone.net'
-                                         ],
-                             '-ap' => [
-                                        'whois.apnic.net'
-                                      ],
-                             '.sa' => [
-                                        'WEB',
-                                        'http://www.saudinic.net.sa/domain/whois.htm'
-                                      ],
-                             '.io' => [
-                                        'WEB',
-                                        'http://www.io.io/whois.html'
-                                      ],
-                             '-cknic' => [
-                                           'whois.nic.ck'
-                                         ],
-                             '.eu.org' => [
-                                            'whois.eu.org'
-                                          ],
-                             '.lc' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.isisworld.lc/domains/'
-                                      ],
-                             '-au' => [
-                                        'whois.aunic.net'
-                                      ],
-                             '.hu' => [
-                                        'whois.nic.hu'
-                                      ],
-                             '.museum' => [
-                                            'whois.museum'
-                                          ],
-                             '.cf' => [
-                                        'WEB',
-                                        'http://www.nic.cf/whois.php3'
-                                      ],
-                             '.is' => [
-                                        'whois.isnet.is'
-                                      ],
-                             '.de' => [
-                                        'whois.denic.de'
-                                      ],
-                             '.mh' => [
-                                        'NONE',
-                                        '#',
-                                        'www.nic.net.mh'
-                                      ],
-                             '.li' => [
-                                        'whois.nic.li'
-                                      ],
-                             '.com.uy' => [
-                                            'WEB',
-                                            'http://dns.antel.net.uy/clientes/consultar.htm'
-                                          ],
-                             '.gn' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.psg.com/dns/gn/'
-                                      ],
-                             '.nf' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.names.nf'
-                                      ],
-                             '.si' => [
-                                        'whois.arnes.si'
-                                      ],
-                             '.uy.com' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '.il' => [
-                                        'whois.isoc.org.il'
-                                      ],
-                             '.dm' => [
-                                        'NONE',
-                                        '#',
-                                        'www.domains.dm',
-                                        '?'
-                                      ],
-                             '.br' => [
-                                        'whois.nic.br'
-                                      ],
-                             '.cr' => [
-                                        'WEB',
-                                        'http://www.nic.cr/consulta-dns.html'
-                                      ],
-                             '-kg' => [
-                                        'whois.domain.kg'
-                                      ],
-                             '-ti' => [
-                                        'whois.telstra.net'
-                                      ],
-                             '.my' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.mynic.net'
-                                      ],
-                             '.nl' => [
-                                        'whois.domain-registry.nl'
-                                      ],
-                             '.gh' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.ghana.com/domreg.html'
-                                      ],
-                             '-rotld' => [
-                                           'whois.rotld.ro'
-                                         ],
-                             '.sa.com' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '.sb' => [
-                                        'WEB',
-                                        'http://www.sbnic.net.sb/search.html'
-                                      ],
-                             '.pl' => [
-                                        'whois.dns.pl'
-                                      ],
-                             '.us.com' => [
-                                            'whois.centralnic.net'
-                                          ],
-                             '-ripe' => [
-                                          'whois.ripe.net'
-                                        ],
-                             '.am' => [
-                                        'WEB',
-                                        'https://www.amnic.net/whois/'
-                                      ],
-                             '.bi' => [
-                                        'WEB',
-                                        'http://www.nic.bi/cgi-bin/whoisbi.pl'
-                                      ],
-                             '.ag' => [
-                                        'WEB',
-                                        'http://www.nic.ag/domain_search.htm'
-                                      ],
-                             '.bf' => [
-                                        'NONE',
-                                        '#',
-                                        'http://www.onatel.bf/domaine.htm'
-                                      ],
-                             '.net.za' => [
-                                            'whois.net.za'
-                                          ],
-                             '.org.za' => [
-                                            'WEB',
-                                            'http://www.org.za/',
-                                            '#',
-                                            'rwhois.org.za:4321'
-                                          ],
-                             '.mt' => [
-                                        'WEB',
-                                        'http://www.um.edu.mt/nic/dir/'
-                                      ],
-                             '.gs' => [
-                                        'whois.adamsnames.tc'
-                                      ],
-                             '.hm' => [
-                                        'whois.registry.hm'
-                                      ],
-                             '.ph' => [
-                                        'WEB',
-                                        'http://www.names.ph/search.html'
-                                      ],
-                             '.uy' => [
-                                        'WEB',
-                                        'http://www.rau.edu.uy/rau/dom/reg.htm'
-                                      ],
-                             '.edu.cn' => [
-                                            'whois.edu.cn'
-                                          ],
-                             '.ie' => [
-                                        'whois.domainregistry.ie'
-                                      ],
-                             '.ac.uk' => [
-                                           'whois.ja.net'
-                                         ],
-                             '.np' => [
-                                        'WEB',
-                                        'http://www.mos.com.np/domsearch.html'
-                                      ],
-                             '.se' => [
-                                        'whois.nic-se.se'
-                                      ],
-                             '.lt' => [
-                                        'whois.ripe.net'
-                                      ],
-                             '.re' => [
-                                        'whois.nic.fr'
-                                      ],
-                             '.jo' => [
-                                        'WEB',
-                                        'http://amon.nic.gov.jo/dns/'
-                                      ],
-                             '.uk' => [
-                                        'whois.nic.uk'
-                                      ],
-                             '-gandi' => [
-                                           'whois.gandi.net'
-                                         ],
-                             '.pt' => [
-                                        'NONE',
-                                        '#',
-                                        'www.dns.pt'
-                                      ],
-                             '-cz' => [
-                                        'whois.nic.cz'
-                                      ],
-                             '.gf' => [
-                                        'whois.nplus.gf'
-                                      ],
-                             '.ir' => [
-                                        'WEB',
-                                        'http://aria.nic.ir/forms/whois.html'
-                                      ],
-                             '.pe' => [
-                                        'whois.rcp.net.pe'
-                                      ],
-                             '.sm' => [
-                                        'whois.ripe.net'
-                                      ]
-                           );
+          '.cy' => [
+                     'WEB',
+                     'http://www.nic.cy/nslookup/online_database.php'
+                   ],
+          '.su' => [
+                     'whois.ripn.net'
+                   ],
+          '.nz' => [
+                     'whois.srs.net.nz'
+                   ],
+          '.in' => [
+                     'whois.registry.in'
+                   ],
+          '.cv' => [
+                     'NONE'
+                   ],
+          '.ni' => [
+                     'WEB',
+                     'http://www.nic.ni/consulta.htm'
+                   ],
+          '.la' => [
+                     'whois.nic.la'
+                   ],
+          '.co.za' => [
+                        'whois.coza.net.za'
+                      ],
+          '.sv' => [
+                     'WEB',
+                     'http://www.uca.edu.sv/dns/'
+                   ],
+          '.pm' => [
+                     'whois.nic.fr'
+                   ],
+          '.ar' => [
+                     'WEB',
+                     'http://www.nic.ar/'
+                   ],
+          '.ng' => [
+                     'whois.register.net.ng'
+                   ],
+          '.ae' => [
+                     'whois.aeda.net.ae'
+                   ],
+          '.jobs' => [
+                       'jobswhois.verisign-grs.com'
+                     ],
+          '.edu.ru' => [
+                         'whois.informika.ru'
+                       ],
+          '-nicat' => [
+                        'whois.nic.at'
+                      ],
+          '.tt' => [
+                     'WEB',
+                     'http://www.nic.tt/cgi-bin/search.pl'
+                   ],
+          '-dk' => [
+                     'whois.dk-hostmaster.dk'
+                   ],
+          '.mp' => [
+                     'NONE'
+                   ],
+          '.info' => [
+                       'whois.afilias.info'
+                     ],
+          '.ws' => [
+                     'whois.samoanic.ws'
+                   ],
+          '.gov.uk' => [
+                         'whois.ja.net'
+                       ],
+          '.police.uk' => [
+                            'NONE'
+                          ],
+          '.ma' => [
+                     'whois.iam.net.ma'
+                   ],
+          '.de.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '.pw' => [
+                     'whois.nic.pw'
+                   ],
+          '.no.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '.td' => [
+                     'NONE'
+                   ],
+          '.au' => [
+                     'whois.ausregistry.net.au'
+                   ],
+          '.je' => [
+                     'whois.je'
+                   ],
+          '.arpa' => [
+                       'whois.iana.org'
+                     ],
+          '.gr' => [
+                     'WEB',
+                     'https://grweb.ics.forth.gr/Whois?lang=en'
+                   ],
+          '.e164.arpa' => [
+                            'whois.ripe.net'
+                          ],
+          '.az' => [
+                     'WEB',
+                     'http://www.nic.az/AzCheck.htm'
+                   ],
+          '.se.net' => [
+                         'whois.centralnic.net'
+                       ],
+          '.yt' => [
+                     'whois.nic.yt'
+                   ],
+          '.uk.net' => [
+                         'whois.centralnic.net'
+                       ],
+          '.vi' => [
+                     'WEB',
+                     'http://www.nic.vi/whoisform.htm'
+                   ],
+          '.mz' => [
+                     'NONE'
+                   ],
+          '.ad' => [
+                     'NONE'
+                   ],
+          '-arin' => [
+                       'whois.arin.net'
+                     ],
+          '.wf' => [
+                     'whois.nic.wf'
+                   ],
+          '.ua' => [
+                     'whois.net.ua'
+                   ],
+          '.gov' => [
+                      'whois.nic.gov'
+                    ],
+          '.lk' => [
+                     'whois.nic.lk'
+                   ],
+          '.do' => [
+                     'WEB',
+                     'http://www.nic.do/whois-h.php3'
+                   ],
+          '.ls' => [
+                     'WEB',
+                     'http://www.co.ls/data/leo2.asp'
+                   ],
+          '.ye' => [
+                     'NONE'
+                   ],
+          '.ki' => [
+                     'WEB',
+                     'http://www.ki/dns/'
+                   ],
+          '.tw' => [
+                     'whois.twnic.net'
+                   ],
+          '.nc' => [
+                     'whois.cctld.nc'
+                   ],
+          '.sk' => [
+                     'whois.sk-nic.sk'
+                   ],
+          '.bm' => [
+                     'WEB',
+                     'http://207.228.133.14/cgi-bin/lansaweb?procfun+BMWHO+BMWHO2+WHO'
+                   ],
+          '-norid' => [
+                        'whois.norid.no'
+                      ],
+          '.pk' => [
+                     'WEB',
+                     'http://www.pknic.net.pk/'
+                   ],
+          '.gg' => [
+                     'whois.gg'
+                   ],
+          '.cd' => [
+                     'whois.nic.cd'
+                   ],
+          '.lv' => [
+                     'whois.nic.lv'
+                   ],
+          '.kg' => [
+                     'whois.domain.kg'
+                   ],
+          '.fk' => [
+                     'NONE'
+                   ],
+          '.vc' => [
+                     'whois.afilias-grs.info'
+                   ],
+          '.so' => [
+                     'NONE'
+                   ],
+          '.an' => [
+                     'NONE'
+                   ],
+          '.sh' => [
+                     'whois.nic.sh'
+                   ],
+          '.ee' => [
+                     'whois.eenet.ee'
+                   ],
+          '.pg' => [
+                     'NONE'
+                   ],
+          '.md' => [
+                     'WEB',
+                     'http://www.dns.md/wh1.php'
+                   ],
+          '.bs' => [
+                     'WEB',
+                     'http://www.nic.bs/cgi-bin/search.pl'
+                   ],
+          '.iq' => [
+                     'NONE'
+                   ],
+          '.sl' => [
+                     'whois.nic.sl'
+                   ],
+          '-sixxs' => [
+                        'whois.sixxs.net'
+                      ],
+          '.ac.za' => [
+                        'whois.ac.za'
+                      ],
+          '.fo' => [
+                     'whois.ripe.net'
+                   ],
+          '.uk.co' => [
+                        'whois.uk.co'
+                      ],
+          '.us' => [
+                     'whois.nic.us'
+                   ],
+          '.cn' => [
+                     'whois.cnnic.net.cn'
+                   ],
+          '.tp' => [
+                     'whois.nic.tp'
+                   ],
+          '.bz' => [
+                     'whois.afilias-grs.info'
+                   ],
+          '.tm' => [
+                     'whois.nic.tm'
+                   ],
+          '.mod.uk' => [
+                         'NONE'
+                       ],
+          '.british-library.uk' => [
+                                     'NONE'
+                                   ],
+          '.zm' => [
+                     'NONE'
+                   ],
+          '.br.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '.eu.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '.biz' => [
+                      'whois.nic.biz'
+                    ],
+          '.mk' => [
+                     'WEB',
+                     'http://dns.marnet.net.mk/registar.php'
+                   ],
+          '.za.net' => [
+                         'whois.za.net'
+                       ],
+          '.qc.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '.ai' => [
+                     'whois.ai'
+                   ],
+          '-metu' => [
+                       'whois.metu.edu.tr'
+                     ],
+          '.rw' => [
+                     'WEB',
+                     'http://www.nic.rw/cgi-bin/whoisrw.pl'
+                   ],
+          '.me' => [
+                     'whois.meregistry.net'
+                   ],
+          '.mo' => [
+                     'WEB',
+                     'http://www.monic.net.mo/'
+                   ],
+          '.nu' => [
+                     'whois.nic.nu'
+                   ],
+          '.yu' => [
+                     'NONE'
+                   ],
+          '.gq' => [
+                     'NONE'
+                   ],
+          '.pro' => [
+                      'whois.registrypro.pro'
+                    ],
+          '.aq' => [
+                     'NONE'
+                   ],
+          '.com' => [
+                      'whois.crsnic.net'
+                    ],
+          '.dj' => [
+                     'whois.domain.dj'
+                   ],
+          '-itnic' => [
+                        'whois.nic.it'
+                      ],
+          '.travel' => [
+                         'whois.nic.travel'
+                       ],
+          '.na' => [
+                     'whois.na-nic.com.na'
+                   ],
+          '.vu' => [
+                     'WEB',
+                     'http://www.vunic.vu/whois.html'
+                   ],
+          '.kn' => [
+                     'NONE'
+                   ],
+          '.uz' => [
+                     'whois.cctld.uz'
+                   ],
+          '.st' => [
+                     'whois.nic.st'
+                   ],
+          '-idnic' => [
+                        'whois.idnic.net.id'
+                      ],
+          '.sz' => [
+                     'NONE'
+                   ],
+          '.aero' => [
+                       'whois.aero'
+                     ],
+          '.coop' => [
+                       'whois.nic.coop'
+                     ],
+          '.jm' => [
+                     'NONE'
+                   ],
+          '.ps' => [
+                     'WEB',
+                     'http://www.nic.ps/whois/whois.html'
+                   ],
+          '.ms' => [
+                     'whois.nic.ms'
+                   ],
+          '.nr' => [
+                     'WEB',
+                     'http://www.cenpac.net.nr/dns/whois.html'
+                   ],
+          '.be' => [
+                     'whois.dns.be'
+                   ],
+          '.pa' => [
+                     'WEB',
+                     'http://www.nic.pa/'
+                   ],
+          '.mv' => [
+                     'NONE'
+                   ],
+          '.fj' => [
+                     'whois.usp.ac.fj'
+                   ],
+          '.th' => [
+                     'whois.thnic.net'
+                   ],
+          '-hst' => [
+                      'whois.networksolutions.com'
+                    ],
+          '.gov.za' => [
+                         'whois.gov.za'
+                       ],
+          '.hr' => [
+                     'WEB',
+                     'http://www.dns.hr/pretrazivanje.html'
+                   ],
+          '.name' => [
+                       'whois.nic.name'
+                     ],
+          '.za.org' => [
+                         'whois.za.org'
+                       ],
+          '.cz' => [
+                     'whois.nic.cz'
+                   ],
+          '.parliament.uk' => [
+                                'NONE'
+                              ],
+          '.gi' => [
+                     'whois.afilias-grs.info'
+                   ],
+          '-tel' => [
+                      'whois.nic.tel'
+                    ],
+          '.tg' => [
+                     'WEB',
+                     'http://www.nic.tg/'
+                   ],
+          '.lu' => [
+                     'whois.dns.lu'
+                   ],
+          '.bh' => [
+                     'NONE'
+                   ],
+          '.cc' => [
+                     'whois.nic.cc'
+                   ],
+          '.gd' => [
+                     'whois.adamsnames.tc'
+                   ],
+          '-ripn' => [
+                       'whois.ripn.net'
+                     ],
+          '.in-addr.arpa' => [
+                               'ARPA'
+                             ],
+          '.tv' => [
+                     'whois.nic.tv'
+                   ],
+          '.ao' => [
+                     'NONE'
+                   ],
+          '.mu' => [
+                     'whois.nic.mu'
+                   ],
+          '.za.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '.aw' => [
+                     'NONE'
+                   ],
+          '.bd' => [
+                     'www.whois.com.bd'
+                   ],
+          '.mn' => [
+                     'whois.afilias-grs.info'
+                   ],
+          '.hn' => [
+                     'whois.afilias-grs.info'
+                   ],
+          '.pr' => [
+                     'whois.nic.pr'
+                   ],
+          '-cn' => [
+                     'whois.cnnic.net.cn'
+                   ],
+          '.by' => [
+                     'WEB',
+                     'http://www.tld.by/indexeng.html'
+                   ],
+          '-sgnic' => [
+                        'whois.nic.net.sg'
+                      ],
+          '.it' => [
+                     'whois.nic.it'
+                   ],
+          '.ch' => [
+                     'whois.nic.ch'
+                   ],
+          '.cm' => [
+                     'NONE'
+                   ],
+          '.al' => [
+                     'NONE'
+                   ],
+          '.mr' => [
+                     'NONE'
+                   ],
+          '.ci' => [
+                     'www.nic.ci'
+                   ],
+          '.gl' => [
+                     'NONE'
+                   ],
+          '.pf' => [
+                     'NONE'
+                   ],
+          '.lr' => [
+                     'NONE'
+                   ],
+          '.bt' => [
+                     'WEB',
+                     'http://www.nic.bt/'
+                   ],
+          '-mnt' => [
+                      'whois.ripe.net'
+                    ],
+          '.tn' => [
+                     'WEB',
+                     'http://whois.ati.tn/'
+                   ],
+          '.im' => [
+                     'whois.nic.im'
+                   ],
+          '.tel' => [
+                      'whois.nic.tel'
+                    ],
+          '.cl' => [
+                     'whois.nic.cl'
+                   ],
+          '.ly' => [
+                     'whois.nic.ly'
+                   ],
+          '.om' => [
+                     'WEB',
+                     'http://www.omnic.om/onlineUser/WHOISLookup.jsp'
+                   ],
+          '.gu' => [
+                     'WEB',
+                     'http://gadao.gov.gu/domainsearch.htm'
+                   ],
+          '.fed.us' => [
+                         'whois.nic.gov'
+                       ],
+          '.sy' => [
+                     'NONE'
+                   ],
+          '.sj' => [
+                     'NONE'
+                   ],
+          '-frnic' => [
+                        'whois.nic.fr'
+                      ],
+          '.edu' => [
+                      'whois.educause.net'
+                    ],
+          '-org' => [
+                      'whois.networksolutions.com'
+                    ],
+          '.cx' => [
+                     'whois.nic.cx'
+                   ],
+          '.gp' => [
+                     'whois.nic.gp'
+                   ],
+          '.kh' => [
+                     'NONE'
+                   ],
+          '.mil' => [
+                      'NONE'
+                    ],
+          '.dz' => [
+                     'WEB',
+                     'https://www.nic.dz/'
+                   ],
+          '.ru' => [
+                     'whois.ripn.net'
+                   ],
+          '.ug' => [
+                     'www.registry.co.ug'
+                   ],
+          '.kz' => [
+                     'whois.nic.kz'
+                   ],
+          '.mg' => [
+                     'whois.nic.mg'
+                   ],
+          '.int' => [
+                      'whois.iana.org'
+                    ],
+          '.ba' => [
+                     'WEB',
+                     'http://www.nic.ba/stream/whois/'
+                   ],
+          '.jpn.com' => [
+                          'whois.centralnic.net'
+                        ],
+          '.vg' => [
+                     'whois.adamsnames.tc'
+                   ],
+          '.km' => [
+                     'NONE'
+                   ],
+          '.sr' => [
+                     'whois.register.sr'
+                   ],
+          '.ga' => [
+                     'NONE'
+                   ],
+          '-dom' => [
+                      'whois.networksolutions.com'
+                    ],
+          '.tc' => [
+                     'whois.adamsnames.tc'
+                   ],
+          '.tz' => [
+                     'WEB',
+                     'http://whois.tznic.or.tz/'
+                   ],
+          '.at' => [
+                     'whois.nic.at'
+                   ],
+          '.co.pl' => [
+                        'whois.co.pl'
+                      ],
+          '.bg' => [
+                     'whois.register.bg'
+                   ],
+          '.lb' => [
+                     'WEB',
+                     'http://www.aub.edu.lb/lbdr/search.html'
+                   ],
+          '.mc' => [
+                     'whois.ripe.net'
+                   ],
+          '.tr' => [
+                     'whois.metu.edu.tr'
+                   ],
+          '.co' => [
+                     'WEB',
+                     'https://www.nic.co/'
+                   ],
+          '.mx' => [
+                     'whois.nic.mx'
+                   ],
+          '.es' => [
+                     'WEB',
+                     'https://www.nic.es/'
+                   ],
+          '.ve' => [
+                     'whois.nic.ve'
+                   ],
+          '.fi' => [
+                     'whois.ficora.fi'
+                   ],
+          '.org' => [
+                      'whois.publicinterestregistry.net'
+                    ],
+          '.asia' => [
+                       'whois.nic.asia'
+                     ],
+          '.sn' => [
+                     'whois.nic.sn'
+                   ],
+          '.sc' => [
+                     'whois.afilias-grs.info'
+                   ],
+          '.uk.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '.bw' => [
+                     'NONE'
+                   ],
+          '.bo' => [
+                     'WEB',
+                     'http://www.nic.bo/'
+                   ],
+          '.ec' => [
+                     'WEB',
+                     'http://www.nic.ec/whois/eng/whois.asp'
+                   ],
+          '.qa' => [
+                     'NONE'
+                   ],
+          '.dk' => [
+                     'whois.dk-hostmaster.dk'
+                   ],
+          '.cn.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '.tk' => [
+                     'whois.dot.tk'
+                   ],
+          '.kw' => [
+                     'WEB',
+                     'http://www.kw/'
+                   ],
+          '.jet.uk' => [
+                         'NONE'
+                       ],
+          '.va' => [
+                     'whois.ripe.net'
+                   ],
+          '.kr' => [
+                     'whois.nic.or.kr'
+                   ],
+          '-ar' => [
+                     'whois.aunic.net'
+                   ],
+          '.nhs.uk' => [
+                         'NONE'
+                       ],
+          '.cat' => [
+                      'whois.cat'
+                    ],
+          '.vn' => [
+                     'WEB',
+                     'http://www.vnnic.vn/english/'
+                   ],
+          '.net' => [
+                      'whois.crsnic.net'
+                    ],
+          '.pn' => [
+                     'WEB',
+                     'http://www.pitcairn.pn/PnRegistry/'
+                   ],
+          '-uynic' => [
+                        'www.rau.edu.uy'
+                      ],
+          '.cg' => [
+                     'WEB',
+                     'http://www.nic.cg/cgi-bin/whois.pl'
+                   ],
+          '.zw' => [
+                     'NONE'
+                   ],
+          '.hk' => [
+                     'whois.hkdnr.net.hk'
+                   ],
+          '.mm' => [
+                     'whois.nic.mm'
+                   ],
+          '.ro' => [
+                     'whois.rotld.ro'
+                   ],
+          '.gm' => [
+                     'whois.ripe.net'
+                   ],
+          '.ht' => [
+                     'whois.nic.ht'
+                   ],
+          '.sd' => [
+                     'NONE'
+                   ],
+          '.sg' => [
+                     'whois.nic.net.sg'
+                   ],
+          '-lrms' => [
+                       'whois.afilias.info'
+                     ],
+          '.ne' => [
+                     'NONE'
+                   ],
+          '.ck' => [
+                     'whois.nic.ck'
+                   ],
+          '.ac' => [
+                     'whois.nic.ac'
+                   ],
+          '.fm' => [
+                     'WEB',
+                     'http://www.dot.fm/whois.html'
+                   ],
+          '.gb.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '.py' => [
+                     'WEB',
+                     'http://www.nic.py/consultas.html'
+                   ],
+          '.bj' => [
+                     'whois.nic.bj'
+                   ],
+          '.er' => [
+                     'NONE'
+                   ],
+          '.tf' => [
+                     'whois.nic.tf'
+                   ],
+          '.eu' => [
+                     'whois.eu'
+                   ],
+          '.ke' => [
+                     'whois.kenic.or.ke'
+                   ],
+          '.kp' => [
+                     'whois.kcce.kp'
+                   ],
+          '.ca' => [
+                     'whois.cira.ca'
+                   ],
+          '.mq' => [
+                     'whois.nic.mq'
+                   ],
+          '.za' => [
+                     'NONE'
+                   ],
+          '.ge' => [
+                     'WEB',
+                     'http://whois.sanet.ge/'
+                   ],
+          '.jp' => [
+                     'whois.jprs.jp'
+                   ],
+          '.gy' => [
+                     'whois.registry.gy'
+                   ],
+          '.id' => [
+                     'whois.idnic.net.id'
+                   ],
+          '.bl.uk' => [
+                        'NONE'
+                      ],
+          '.bb' => [
+                     'WEB',
+                     'http://www.barbadosdomains.net/search_domain.php'
+                   ],
+          '-tw' => [
+                     'whois.twnic.net'
+                   ],
+          '.hu.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '.tj' => [
+                     'whois.nic.tj'
+                   ],
+          '.ml' => [
+                     'NONE'
+                   ],
+          '.cu' => [
+                     'WEB',
+                     'http://www.nic.cu/consult.html'
+                   ],
+          '-il' => [
+                     'whois.isoc.org.il'
+                   ],
+          '.mobi' => [
+                       'whois.dotmobiregistry.net'
+                     ],
+          '.gt' => [
+                     'WEB',
+                     'http://www.gt/whois.htm'
+                   ],
+          '.gb' => [
+                     'NONE'
+                   ],
+          '.fr' => [
+                     'whois.nic.fr'
+                   ],
+          '.rs' => [
+                     'WEB',
+                     'http://www.nic.rs/en/whois'
+                   ],
+          '.gb.net' => [
+                         'whois.centralnic.net'
+                       ],
+          '.ky' => [
+                     'WEB',
+                     'http://kynseweb.messagesecure.com/kywebadmin/'
+                   ],
+          '.bv' => [
+                     'NONE'
+                   ],
+          '.mw' => [
+                     'WEB',
+                     'http://www.registrar.mw/'
+                   ],
+          '.af' => [
+                     'whois.nic.af'
+                   ],
+          '.no' => [
+                     'whois.norid.no'
+                   ],
+          '.to' => [
+                     'whois.tonic.to'
+                   ],
+          '-is' => [
+                     'whois.isnet.is'
+                   ],
+          '.as' => [
+                     'whois.nic.as'
+                   ],
+          '.se.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '-6bone' => [
+                        'whois.6bone.net'
+                      ],
+          '-afrinic' => [
+                          'whois.afrinic.net'
+                        ],
+          '-ap' => [
+                     'whois.apnic.net'
+                   ],
+          '.sa' => [
+                     'saudinic.net.sa'
+                   ],
+          '-uanic' => [
+                        'whois.com.ua'
+                      ],
+          '-nicir' => [
+                        'whois.nic.ir'
+                      ],
+          '.io' => [
+                     'whois.nic.io'
+                   ],
+          '-cknic' => [
+                        'whois.nic.ck'
+                      ],
+          '.eu.org' => [
+                         'whois.eu.org'
+                       ],
+          '.icnet.uk' => [
+                           'NONE'
+                         ],
+          '.bn' => [
+                     'NONE'
+                   ],
+          '.et' => [
+                     'NONE'
+                   ],
+          '.lc' => [
+                     'whois.afilias-grs.info'
+                   ],
+          '.ax' => [
+                     'NONE'
+                   ],
+          '.museum' => [
+                         'whois.museum'
+                       ],
+          '.hu' => [
+                     'whois.nic.hu'
+                   ],
+          '.nls.uk' => [
+                         'NONE'
+                       ],
+          '.eg' => [
+                     'NONE'
+                   ],
+          '.cf' => [
+                     'NONE'
+                   ],
+          '.is' => [
+                     'whois.isnet.is'
+                   ],
+          '.de' => [
+                     'whois.denic.de'
+                   ],
+          '.mh' => [
+                     'NONE'
+                   ],
+          '-lacnic' => [
+                         'whois.lacnic.net'
+                       ],
+          '.com.uy' => [
+                         'WEB',
+                         'https://nic.anteldata.com.uy/dns/'
+                       ],
+          '.li' => [
+                     'whois.nic.li'
+                   ],
+          '.gn' => [
+                     'NONE'
+                   ],
+          '.nf' => [
+                     'whois.nic.nf'
+                   ],
+          '-kenic' => [
+                        'whois.kenic.or.ke'
+                      ],
+          '.si' => [
+                     'whois.arnes.si'
+                   ],
+          '.uy.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '.dm' => [
+                     'whois.nic.dm'
+                   ],
+          '.br' => [
+                     'whois.nic.br'
+                   ],
+          '.il' => [
+                     'whois.isoc.org.il'
+                   ],
+          '.cr' => [
+                     'WEB',
+                     'http://www.nic.cr/niccr_publico/showRegistroDominiosScreen.do'
+                   ],
+          '-kg' => [
+                     'whois.domain.kg'
+                   ],
+          '-ti' => [
+                     'whois.telstra.net'
+                   ],
+          '.my' => [
+                     'whois.mynic.net.my'
+                   ],
+          '.nl' => [
+                     'whois.domain-registry.nl'
+                   ],
+          '.gh' => [
+                     'WEB',
+                     'http://www.nic.gh/customer/search_c.htm'
+                   ],
+          '-rotld' => [
+                        'whois.rotld.ro'
+                      ],
+          '.sa.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '.sb' => [
+                     'whois.nic.net.sb'
+                   ],
+          '.pl' => [
+                     'whois.dns.pl'
+                   ],
+          '.us.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '-ripe' => [
+                       'whois.ripe.net'
+                     ],
+          '.web.com' => [
+                          'whois.centralnic.net'
+                        ],
+          '.am' => [
+                     'whois.nic.am'
+                   ],
+          '.bi' => [
+                     'WEB',
+                     'http://www.nic.bi/Nic_search.asp'
+                   ],
+          '.bf' => [
+                     'NONE'
+                   ],
+          '.ag' => [
+                     'whois.nic.ag'
+                   ],
+          '.ru.com' => [
+                         'whois.centralnic.net'
+                       ],
+          '.org.za' => [
+                         'WEB',
+                         'http://www.org.za/'
+                       ],
+          '.mt' => [
+                     'WEB',
+                     'https://www.nic.org.mt/dotmt/'
+                   ],
+          '.gs' => [
+                     'whois.nic.gs'
+                   ],
+          '.uy' => [
+                     'whois.nic.org.uy'
+                   ],
+          '.hm' => [
+                     'whois.registry.hm'
+                   ],
+          '.ph' => [
+                     'WEB',
+                     'http://www.dot.ph/'
+                   ],
+          '.edu.cn' => [
+                         'whois.edu.cn'
+                       ],
+          '.ie' => [
+                     'whois.domainregistry.ie'
+                   ],
+          '-coop' => [
+                       'whois.nic.coop'
+                     ],
+          '.ac.uk' => [
+                        'whois.ja.net'
+                      ],
+          '.co.ca' => [
+                        'whois.co.ca'
+                      ],
+          '.np' => [
+                     'WEB',
+                     'http://www.mos.com.np/domsearch.html'
+                   ],
+          '.se' => [
+                     'whois.nic-se.se'
+                   ],
+          '.lt' => [
+                     'whois.domreg.lt'
+                   ],
+          '.re' => [
+                     'whois.nic.fr'
+                   ],
+          '.uk' => [
+                     'whois.nic.uk'
+                   ],
+          '.jo' => [
+                     'WEB',
+                     'http://www.dns.jo/Whois.aspx'
+                   ],
+          '.tl' => [
+                     'whois.nic.tl'
+                   ],
+          '-gandi' => [
+                        'whois.gandi.net'
+                      ],
+          '.pt' => [
+                     'whois.dns.pt'
+                   ],
+          '-cz' => [
+                     'whois.nic.cz'
+                   ],
+          '.gf' => [
+                     'whois.nplus.gf'
+                   ],
+          '.gw' => [
+                     'NONE'
+                   ],
+          '.ir' => [
+                     'whois.nic.ir'
+                   ],
+          '.pe' => [
+                     'whois.nic.pe'
+                   ],
+          '.sm' => [
+                     'whois.ripe.net'
+                   ],
+);
 
 sub new {
   my $self = bless { data => \%data }, shift;
@@ -1061,10 +1146,23 @@ sub tld {
   my $self = shift;
   my $lookup = shift || return;
 
-  foreach my $tld ( keys %{ $self->{data} } ) {
-	if ( $lookup =~ /\Q$tld\E$/ ) {
-		return @{ $self->{data}->{ $tld } };
-	}
+  unless ( $lookup =~ /\./ ) {
+    foreach my $tld ( sort keys %{ $self->{data} } ) {
+		  return @{ $self->{data}->{ $tld } }
+        if $lookup =~ /\Q$tld\E$/;
+    }
+  }
+  else {
+    my $query = $lookup;
+    while ( $query ) {
+      if ( exists $self->{data}->{".$query"} ) {
+        return @{ $self->{data}->{".$query"} };
+      }
+      my @vals = split /\./, $query;
+      shift @vals;
+      $query = join '.', @vals;
+    }
+    return 'NONE';
   }
   return;
 }
@@ -1097,7 +1195,7 @@ E::Component::Client::Whois::TLDList contains a list of top-level domains mapped
 
 =over
 
-=item new
+=item C<new>
 
 Returns a POE::Component::Client::Whois::TLDList object.
 
@@ -1107,7 +1205,7 @@ Returns a POE::Component::Client::Whois::TLDList object.
 
 =over
 
-=item tld
+=item C<tld>
 
 Takes a domain or hostname and returns a list or an undef on failure. The list returned usually has the
 reponsible Whois server as the first item in the list, but some TLDs do not have Whois servers.
@@ -1116,7 +1214,9 @@ If the first item in the list is 'NONE' then that TLD doesn't have a Whois serve
 
 If the first item in the list is 'WEB' then that TLD has a web interface only to query whois. The second item will usually be the web url to query.
 
-=item dump_tlds
+If the first item in the list is 'ARPA' that that TLD is an .arpa address.
+
+=item C<dump_tlds>
 
 Uses Data::Dumper to dump TLD data to STDERR.
 
@@ -1124,10 +1224,10 @@ Uses Data::Dumper to dump TLD data to STDERR.
 
 =head1 AUTHOR
 
-Chris 'BinGOs' Williams
+Chris C<BinGOs> Williams
 
 =head1 LICENSE
 
-Copyright C<(c)> Chris Williams
+Copyright E<copy> Chris Williams
 
 This module may be used, modified, and distributed under the same terms as Perl itself. Please see the license that came with your Perl distribution for details.
