@@ -1,4 +1,4 @@
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use_ok("POE::Component::Client::Whois::TLDList");
 my $tld = POE::Component::Client::Whois::TLDList->new();
@@ -10,6 +10,7 @@ my %tests = (
   'bingosnet.ao', 'NONE',
   'bingosnet.arpa', 'whois.iana.org',
   '1.0.0.100.in-addr.arpa', 'ARPA',
+  'bingosnet.cy', 'WEB',
 );
 
 foreach my $test ( keys %tests ) {

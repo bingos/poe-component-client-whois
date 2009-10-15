@@ -1145,6 +1145,7 @@ sub dump_tlds {
 sub tld {
   my $self = shift;
   my $lookup = shift || return;
+  $lookup =~ s/\.$//;
 
   unless ( $lookup =~ /\./ ) {
     foreach my $tld ( sort keys %{ $self->{data} } ) {
