@@ -1,6 +1,9 @@
 POE::Component::Client::Whois ChangeLOG
 =======================================
 
+1.24  Thu Oct 15 20:47:12 BST 2009
+  - Implemented NONE and WEB handling behaviour
+
 1.22  Thu Oct 15 11:28:17 BST 2009
   - Refactoring of the TLD lookups
   - Updated TLD lists

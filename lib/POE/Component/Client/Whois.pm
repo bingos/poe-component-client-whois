@@ -9,7 +9,7 @@ use POE::Component::Client::Whois::TLDList;
 use POE::Component::Client::Whois::IPBlks;
 use vars qw($VERSION);
 
-$VERSION = '1.22';
+$VERSION = '1.24';
 
 sub whois {
   my $package = shift;
@@ -84,6 +84,22 @@ sub _start {
 sub _connect {
   my ($kernel,$self) = @_[KERNEL,OBJECT];
   # Check here for NONE or WEB and send an error straight away.
+  if ( my ($type) = $self->{request}->{host} =~ /^(NONE|WEB)$/ ) {
+    my $error;
+    if ( $type eq 'NONE' ) {
+      $error = 'This TLD has no whois server.';
+    }
+    else {
+     $error = 'This TLD has no whois server, but you can access the ' . 
+              'whois database at ' .
+              (POE::Component::Client::Whois::TLDList->new->tld($self->{request}->{query}))[1];
+    }
+    $self->{request}->{error} = $error;
+    my $request = delete $self->{request};
+    my $session = delete $request->{session};
+    $kernel->post( $session => $request->{event} => $request );
+    return;
+  }
   $self->{factory} = POE::Wheel::SocketFactory->new(
 	SocketDomain   => AF_INET,
 	SocketType     => SOCK_STREAM,

@@ -5,7 +5,7 @@ use warnings;
 use Data::Dumper;
 use vars qw($VERSION);
 
-$VERSION = '1.22';
+$VERSION = '1.24';
 
 my %data = (
           '.cy' => [
@@ -1163,9 +1163,8 @@ sub tld {
       shift @vals;
       $query = join '.', @vals;
     }
-    return 'NONE';
   }
-  return;
+  return 'NONE';
 }
 
 1;
