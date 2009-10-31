@@ -9,7 +9,7 @@ use POE::Component::Client::Whois::TLDList;
 use POE::Component::Client::Whois::IPBlks;
 use vars qw($VERSION);
 
-$VERSION = '1.26';
+$VERSION = '1.28';
 
 sub whois {
     my $package = shift;
@@ -86,7 +86,7 @@ sub whois {
 
 sub _start {
     my ( $kernel, $self ) = @_[ KERNEL, OBJECT ];
-    $self->{_dot_com} = POE::Component::Client::Whois::TLDList->new()->tld('.com');
+    $self->{_dot_com} = ( POE::Component::Client::Whois::TLDList->new()->tld('.com') )[0];
     $self->{session_id} = $_[SESSION]->ID();
     $kernel->yield('_connect');
     undef;

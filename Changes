@@ -1,6 +1,9 @@
 POE::Component::Client::Whois ChangeLOG
 =======================================
 
+1.28  Sat Oct 31 12:26:21 GMT 2009
+  - Actually fixed referral following
+
 1.26  Sat Oct 31 11:23:40 GMT 2009
   - Fixed referral following
 

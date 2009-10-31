@@ -5,7 +5,7 @@ use warnings;
 use Data::Dumper;
 use vars qw($VERSION);
 
-$VERSION = '1.26';
+$VERSION = '1.28';
 
 my %data = (
           '.cy' => [

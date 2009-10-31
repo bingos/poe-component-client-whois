@@ -5,7 +5,7 @@ use warnings;
 use Net::Netmask;
 use vars qw($VERSION);
 
-$VERSION = '1.26';
+$VERSION = '1.28';
 
 sub new {
   my $self = bless { }, shift;
