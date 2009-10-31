@@ -1,6 +1,9 @@
 POE::Component::Client::Whois ChangeLOG
 =======================================
 
+1.26  Sat Oct 31 11:23:40 GMT 2009
+  - Fixed referral following
+
 1.24  Thu Oct 15 20:47:12 BST 2009
   - Implemented NONE and WEB handling behaviour
 

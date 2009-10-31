@@ -9,195 +9,220 @@ use POE::Component::Client::Whois::TLDList;
 use POE::Component::Client::Whois::IPBlks;
 use vars qw($VERSION);
 
-$VERSION = '1.24';
+$VERSION = '1.26';
 
 sub whois {
-  my $package = shift;
-  my %args = @_;
+    my $package = shift;
+    my %args    = @_;
 
-  $args{lc $_} = delete $args{$_} for keys %args;
+    $args{ lc $_ } = delete $args{$_} for keys %args;
 
-  $args{referral} = 1 unless defined $args{referral} and !$args{referral};
+    $args{referral} = 1 unless defined $args{referral} and !$args{referral};
 
-  unless ( $args{query} and $args{event} ) {
-	warn "You must provide a query string and a response event\n";
-	return undef;
-  }
-
-  unless ( $args{host} ) {
-	my $whois_server;
-	my $tld = POE::Component::Client::Whois::TLDList->new();
-	my $blk = POE::Component::Client::Whois::IPBlks->new();
-	SWITCH: {
-	  if ( $args{query} =~ /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/ and scalar ( grep $_>=0&&$_<=255, split/\./, $args{query} ) == 4 ) {
-		$whois_server = ( $blk->get_server( $args{query} ) )[0];
-		unless ( $whois_server ) {
-			warn "Couldn\'t determine correct whois server, falling back on arin\n";
-			$whois_server = 'whois.arin.net';
-		}
-		last SWITCH;
-	  }
-	  if ( $args{query} =~ /:/ ) {
-		warn "IPv6 detected, defaulting to 6bone\n";
-		$whois_server = 'whois.6bone.net';
-		last SWITCH;
-	  }
-	  $whois_server = ( $tld->tld( $args{query} ) )[0];
-    if ( $whois_server eq 'ARPA' ) {
-      $args{query} =~ s/\.in-addr\.arpa//;
-      $args{query} = join '.', reverse split(/\./,$args{query});
-		  $whois_server = ( $blk->get_server( $args{query} ) )[0];
-		  unless ( $whois_server ) {
-			  warn "Couldn\'t determine correct whois server, falling back on arin\n";
-			  $whois_server = 'whois.arin.net';
-		  }
+    unless ( $args{query} and $args{event} ) {
+        warn "You must provide a query string and a response event\n";
+        return undef;
     }
-	  unless ( $whois_server ) {
-		warn "Could not automagically determine whois server from query string, defaulting to internic \n";
-		$whois_server = 'whois.internic.net';
-	  }
-	}
-	$args{host} = $whois_server;
-  }
 
-  $args{session} = $poe_kernel->get_active_session() unless ( $args{session} );
+    unless ( $args{host} ) {
+        my $whois_server;
+        my $tld = POE::Component::Client::Whois::TLDList->new();
+        my $blk = POE::Component::Client::Whois::IPBlks->new();
+      SWITCH: {
+            if ( $args{query} =~ /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/
+                and
+                scalar( grep $_ >= 0 && $_ <= 255, split /\./, $args{query} ) ==
+                4 )
+            {
+                $whois_server = ( $blk->get_server( $args{query} ) )[0];
+                unless ($whois_server) {
+                    warn
+"Couldn\'t determine correct whois server, falling back on arin\n";
+                    $whois_server = 'whois.arin.net';
+                }
+                last SWITCH;
+            }
+            if ( $args{query} =~ /:/ ) {
+                warn "IPv6 detected, defaulting to 6bone\n";
+                $whois_server = 'whois.6bone.net';
+                last SWITCH;
+            }
+            $whois_server = ( $tld->tld( $args{query} ) )[0];
+            if ( $whois_server eq 'ARPA' ) {
+                $args{query} =~ s/\.in-addr\.arpa//;
+                $args{query} = join '.', reverse split( /\./, $args{query} );
+                $whois_server = ( $blk->get_server( $args{query} ) )[0];
+                unless ($whois_server) {
+                    warn
+"Couldn\'t determine correct whois server, falling back on arin\n";
+                    $whois_server = 'whois.arin.net';
+                }
+            }
+            unless ($whois_server) {
+                warn
+"Could not automagically determine whois server from query string, defaulting to internic \n";
+                $whois_server = 'whois.internic.net';
+            }
+        }
+        $args{host} = $whois_server;
+    }
 
-  my $self = bless { request => \%args }, $package;
+    $args{session} = $poe_kernel->get_active_session()
+      unless ( $args{session} );
 
-  $self->{session_id} = POE::Session->create(
-	object_states => [ 
-		$self => [ qw(_start _connect _sock_input _sock_down _sock_up _sock_failed _time_out) ],
-	],
-	options => { trace => 0 },
-  )->ID();
+    my $self = bless { request => \%args }, $package;
 
-  return $self;
+    $self->{session_id} = POE::Session->create(
+        object_states => [
+            $self => [
+                qw(_start _connect _sock_input _sock_down _sock_up _sock_failed _time_out)
+            ],
+        ],
+        options => { trace => 0 },
+    )->ID();
+
+    return $self;
 }
 
 sub _start {
-  my ($kernel,$self) = @_[KERNEL,OBJECT];
-  $self->{session_id} = $_[SESSION]->ID();
-  $kernel->yield( '_connect' );
-  undef;
+    my ( $kernel, $self ) = @_[ KERNEL, OBJECT ];
+    $self->{_dot_com} = POE::Component::Client::Whois::TLDList->new()->tld('.com');
+    $self->{session_id} = $_[SESSION]->ID();
+    $kernel->yield('_connect');
+    undef;
 }
 
 sub _connect {
-  my ($kernel,$self) = @_[KERNEL,OBJECT];
-  # Check here for NONE or WEB and send an error straight away.
-  if ( my ($type) = $self->{request}->{host} =~ /^(NONE|WEB)$/ ) {
-    my $error;
-    if ( $type eq 'NONE' ) {
-      $error = 'This TLD has no whois server.';
+    my ( $kernel, $self ) = @_[ KERNEL, OBJECT ];
+
+    # Check here for NONE or WEB and send an error straight away.
+    if ( my ($type) = $self->{request}->{host} =~ /^(NONE|WEB)$/ ) {
+        my $error;
+        if ( $type eq 'NONE' ) {
+            $error = 'This TLD has no whois server.';
+        }
+        else {
+            $error =
+                'This TLD has no whois server, but you can access the '
+              . 'whois database at '
+              . (
+                POE::Component::Client::Whois::TLDList->new->tld(
+                    $self->{request}->{query}
+                )
+              )[1];
+        }
+        $self->{request}->{error} = $error;
+        my $request = delete $self->{request};
+        my $session = delete $request->{session};
+        $kernel->post( $session => $request->{event} => $request );
+        return;
     }
-    else {
-     $error = 'This TLD has no whois server, but you can access the ' . 
-              'whois database at ' .
-              (POE::Component::Client::Whois::TLDList->new->tld($self->{request}->{query}))[1];
-    }
-    $self->{request}->{error} = $error;
-    my $request = delete $self->{request};
-    my $session = delete $request->{session};
-    $kernel->post( $session => $request->{event} => $request );
-    return;
-  }
-  $self->{factory} = POE::Wheel::SocketFactory->new(
-	SocketDomain   => AF_INET,
-	SocketType     => SOCK_STREAM,
-	SocketProtocol => 'tcp',
-	RemoteAddress  => $self->{request}->{host},
-	RemotePort     => $self->{request}->{port} || 43,
-	SuccessEvent   => '_sock_up',
-	FailureEvent   => '_sock_failed',
-  );
-  undef;
+    $self->{factory} = POE::Wheel::SocketFactory->new(
+        SocketDomain   => AF_INET,
+        SocketType     => SOCK_STREAM,
+        SocketProtocol => 'tcp',
+        RemoteAddress  => $self->{request}->{host},
+        RemotePort     => $self->{request}->{port} || 43,
+        SuccessEvent   => '_sock_up',
+        FailureEvent   => '_sock_failed',
+    );
+    undef;
 }
 
 sub _sock_failed {
-  my ($kernel, $self, $op, $errno, $errstr) = @_[KERNEL, OBJECT, ARG0..ARG2];
+    my ( $kernel, $self, $op, $errno, $errstr ) =
+      @_[ KERNEL, OBJECT, ARG0 .. ARG2 ];
 
-  delete $self->{factory};
-  $self->{request}->{error} = "$op error $errno: $errstr";
-  my $request = delete $self->{request};
-  my $session = delete $request->{session};
+    delete $self->{factory};
+    $self->{request}->{error} = "$op error $errno: $errstr";
+    my $request = delete $self->{request};
+    my $session = delete $request->{session};
 
-  $kernel->post( $session => $request->{event} => $request );
-  undef;
+    $kernel->post( $session => $request->{event} => $request );
+    undef;
 }
 
 sub _sock_up {
-  my ($kernel, $self, $session, $socket) = @_[KERNEL, OBJECT, SESSION, ARG0];
-  delete $self->{factory};
+    my ( $kernel, $self, $session, $socket ) =
+      @_[ KERNEL, OBJECT, SESSION, ARG0 ];
+    delete $self->{factory};
 
-  $self->{'socket'} = new POE::Wheel::ReadWrite
-    ( Handle     => $socket,
-      Driver     => POE::Driver::SysRW->new(),
-      Filter     => POE::Filter::Line->new( InputRegexp => '\015?\012',
-					    OutputLiteral => "\015\012" ),
-      InputEvent => '_sock_input',
-      ErrorEvent => '_sock_down',
+    $self->{'socket'} = new POE::Wheel::ReadWrite(
+        Handle => $socket,
+        Driver => POE::Driver::SysRW->new(),
+        Filter => POE::Filter::Line->new(
+            InputRegexp   => '\015?\012',
+            OutputLiteral => "\015\012"
+        ),
+        InputEvent => '_sock_input',
+        ErrorEvent => '_sock_down',
     );
 
-  unless ( $self->{'socket'} ) {
-	my $request = delete $self->{request};
-	my $session = delete $request->{session};
-	$request->{error} = "Couldn\'t create a Wheel::ReadWrite on socket for whois";
-	$kernel->post( $session => $request->{event} => $request );
-	return undef;
-  }
+    unless ( $self->{'socket'} ) {
+        my $request = delete $self->{request};
+        my $session = delete $request->{session};
+        $request->{error} =
+          "Couldn\'t create a Wheel::ReadWrite on socket for whois";
+        $kernel->post( $session => $request->{event} => $request );
+        return undef;
+    }
 
-  $self->{'socket'}->put( $self->{request}->{query} );
-  $kernel->delay( '_time_out' => 30 );
-  undef;
+    $self->{'socket'}->put( $self->{request}->{query} );
+    $kernel->delay( '_time_out' => 30 );
+    undef;
 }
 
 sub _sock_down {
-  my ($kernel,$self) = @_[KERNEL,OBJECT];
-  delete $self->{socket};
-  $kernel->delay( '_time_out' => undef );
+    my ( $kernel, $self ) = @_[ KERNEL, OBJECT ];
+    delete $self->{socket};
+    $kernel->delay( '_time_out' => undef );
 
-  if ( $self->{request}->{referral} and $self->{_referral} ) {
-	delete $self->{request}->{reply} if $self->{referral_only};
-	$self->{request}->{host} = delete $self->{_referral};
-	$kernel->yield( '_connect' );
-	return;
-  }
+    if ( $self->{request}->{referral} and $self->{_referral} ) {
+        delete $self->{request}->{reply} if $self->{referral_only};
+        $self->{request}->{host} = delete $self->{_referral};
+        $kernel->yield('_connect');
+        return;
+    }
 
-  my $request = delete $self->{request};
-  my $session = delete $request->{session};
+    my $request = delete $self->{request};
+    my $session = delete $request->{session};
 
-  if ( defined ( $request->{reply} ) and ref( $request->{reply} ) eq 'ARRAY' ) {
-	delete $request->{error};
-  } else {
-	$request->{error} = "No information received from remote host";
-  }
-  $kernel->post( $session => $request->{event} => $request );
-  undef;
+    if ( defined( $request->{reply} ) and ref( $request->{reply} ) eq 'ARRAY' )
+    {
+        delete $request->{error};
+    }
+    else {
+        $request->{error} = "No information received from remote host";
+    }
+    $kernel->post( $session => $request->{event} => $request );
+    undef;
 }
 
 sub _sock_input {
-  my ($kernel,$self,$line) = @_[KERNEL,OBJECT,ARG0];
-  push @{ $self->{request}->{reply} }, $line;
-  if ( my ($referral) = $line =~ /ReferralServer:\s+(.*)$/ ) {
-        my($scheme, $authority, $path, $query, $fragment) =
-  	  $referral =~ m|(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*)(?:\?([^#]*))?(?:#(.*))?|;
-	return unless $scheme and $authority;
-	$scheme = lc $scheme;
-	return unless $scheme eq 'whois';
-	my ($host,$port) = split /:/, $authority;
-	return if $host eq $self->{request}->{host};
-	$self->{_referral} = $host;
-  }
-  if ( $self->{request}->{host} eq 'whois.internic.net' 
-	and my ($other) = $line =~ /Whois Server:\s+(.*)\s*$/i ) {
-	$self->{_referral} = $other;
-  }
-  undef;
+    my ( $kernel, $self, $line ) = @_[ KERNEL, OBJECT, ARG0 ];
+    push @{ $self->{request}->{reply} }, $line;
+    if ( my ($referral) = $line =~ /ReferralServer:\s+(.*)$/ ) {
+        my ( $scheme, $authority, $path, $query, $fragment ) = $referral =~
+          m|(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*)(?:\?([^#]*))?(?:#(.*))?|;
+        return unless $scheme and $authority;
+        $scheme = lc $scheme;
+        return unless $scheme eq 'whois';
+        my ( $host, $port ) = split /:/, $authority;
+        return if $host eq $self->{request}->{host};
+        $self->{_referral} = $host;
+    }
+    if ( $self->{request}->{host} eq $self->{_dot_com} 
+        and my ($other) = $line =~ /Whois Server:\s+(.*)\s*$/i )
+    {
+        $self->{_referral} = $other;
+    }
+    undef;
 }
 
 sub _time_out {
-  my ($kernel,$self) = @_[KERNEL,OBJECT];
-  delete $self->{'socket'};
-  undef;
+    my ( $kernel, $self ) = @_[ KERNEL, OBJECT ];
+    delete $self->{'socket'};
+    undef;
 }
 
 1;
