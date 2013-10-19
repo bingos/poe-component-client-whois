@@ -14,6 +14,7 @@ requires 'POE::Filter::Line' => 0;
 requires 'POE::Wheel::ReadWrite' => 0;
 requires 'POE::Wheel::SocketFactory' => 0;
 requires 'Net::Netmask' => 1.9012;
+requires 'Net::IP::Minimal' => 0;
 auto_license holder => 'Chris Williams';
 githubmeta;
 auto_provides;
