@@ -1,11 +1,10 @@
 package POE::Component::Client::Whois::IPBlks;
 
+#ABSTRACT: Determine which whois server is responsible for a network address.
+
 use strict;
 use warnings;
 use Net::Netmask;
-use vars qw($VERSION);
-
-$VERSION = '1.28';
 
 sub new {
   my $self = bless { }, shift;
@@ -148,7 +147,7 @@ sub new {
   '150.0.0.0/8' => 'whois.apnic.net',
   '151.0.0.0/8' => 'whois.ripe.net',
   '152.0.0.0/8' => 'whois.arin.net',
-  '153.0.0.0/8' => 'whois.apnic.net'
+  '153.0.0.0/8' => 'whois.apnic.net',
   '154.0.0.0/8' => 'whois.afrinic.net',
   '155.0.0.0/8' => 'whois.arin.net',
   '156.0.0.0/8' => 'whois.arin.net',
@@ -244,11 +243,7 @@ sub get_server {
 
 1;
 
-__END__
-
-=head1 NAME
-
-POE::Component::Client::Whois::IPBlks - determine which whois server is responsible for a network address.
+=pod
 
 =head1 SYNOPSIS
 
@@ -283,16 +278,10 @@ Takes a single argument, an IP address to lookup the Whois for. Returns the appl
 
 =back
 
-=head1 AUTHOR
-
-Chris C<BinGOs> Williams
-
-=head1 LICENSE
-
-Copyright E<copy> Chris Williams
-
-This module may be used, modified, and distributed under the same terms as Perl itself. Please see the license that came with your Perl distribution for details.
-
 =head1 SEE ALSO
 
 L<Net::Netmask>
+
+L<http://www.iana.org/assignments/ipv4-address-space/ipv4-address-space.xhtml>
+
+=cut

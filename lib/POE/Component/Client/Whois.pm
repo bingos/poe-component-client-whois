@@ -1,5 +1,7 @@
 package POE::Component::Client::Whois;
 
+#ABSTRACT: A one shot non-blocking RFC 812 WHOIS query.
+
 use strict;
 use warnings;
 use Socket;
@@ -7,9 +9,6 @@ use Carp;
 use POE qw(Filter::Line Wheel::ReadWrite Wheel::SocketFactory);
 use POE::Component::Client::Whois::TLDList;
 use POE::Component::Client::Whois::IPBlks;
-use vars qw($VERSION);
-
-$VERSION = '1.28';
 
 sub whois {
     my $package = shift;
@@ -226,15 +225,12 @@ sub _time_out {
 }
 
 1;
-__END__
 
-=head1 NAME
-
-POE::Component::Client::Whois - A one shot non-blocking RFC 812 WHOIS query.
+=pod
 
 =head1 SYNOPSIS
 
-   use strict; 
+   use strict;
    use warnings;
    use POE qw(Component::Client::Whois);
    use Data::Dumper;
@@ -251,15 +247,15 @@ POE::Component::Client::Whois - A one shot non-blocking RFC 812 WHOIS query.
    sub _start {
      my ($kernel,$heap) = @_[KERNEL,HEAP];
 
-     POE::Component::Client::Whois->whois( host => "whois.nic.uk", 
-					   query => 'bingosnet.co.uk', 
+     POE::Component::Client::Whois->whois( host => "whois.nic.uk",
+					   query => 'bingosnet.co.uk',
 					   event => '_response',
 					   _arbitary => [ qw(moo moo moo) ] );
      undef;
    }
 
    sub _response {
-  	print STDERR Dumper( $_[ARG0] );
+      print STDERR Dumper( $_[ARG0] );
    }
 
 =head1 DESCRIPTION
@@ -296,28 +292,20 @@ an underscore prefix to avoid clashes with future versions.
 ARG0 will be a hashref, which contains the original parameters passed to whois() ( including any arbitary data ), plus either one of the following two keys:
 
   'reply', an arrayref of response lines from the whois server, assuming no error occurred;
-  'error', in lieu of a valid response, this will be defined with a brief description of 
+  'error', in lieu of a valid response, this will be defined with a brief description of
 	   what went wrong;
 
 No parsing is undertaken on the returned data, this is an exercise left to the reader >;]
-
-=head1 AUTHOR
-
-Chris C<BinGOs> Williams <chris@bingosnet.co.uk>
-
-This module is based on the linux whois client from L<http://www.linux.it/~md/software/>.
-
-=head1 LICENSE
-
-Copyright E<copy> Chris Williams
-
-This module may be used, modified, and distributed under the same terms as Perl itself. Please see the license that came with your Perl distribution for details.
 
 =head1 KUDOS
 
 ketas, for first suggesting this module;
 buu, decay and hazard from #perl @ freenode, for helpful suggestions;
 
+This module is based on the linux whois client from L<http://www.linux.it/~md/software/>.
+
 =head1 SEE ALSO
 
 RFC 812 L<http://www.faqs.org/rfcs/rfc812.html>.
+
+=cut
