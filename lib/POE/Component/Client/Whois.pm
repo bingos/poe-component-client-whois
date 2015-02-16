@@ -42,8 +42,8 @@ sub whois {
                 last SWITCH;
             }
             if ( $args{query} =~ /:/ ) {
-                warn "IPv6 detected, defaulting to 6bone\n";
-                $whois_server = 'whois.6bone.net';
+                warn "IPv6 detected, defaulting to arin\n";
+                $whois_server = 'whois.arin.net';
                 last SWITCH;
             }
             $whois_server = ( $tld->tld( $args{query} ) )[0];
@@ -178,7 +178,10 @@ sub _sock_down {
 
     if ( $self->{request}->{referral} and $self->{_referral} ) {
         delete $self->{request}->{reply} if $self->{referral_only};
-        $self->{request}->{host} = delete $self->{_referral};
+        my $referral = delete $self->{_referral};
+        my ($host,$port) = split /:/, $referral;
+        $self->{request}->{host} = $host;
+        $self->{request}->{port} = ( $port ? $port : '43' );
         $kernel->yield('_connect');
         return;
     }
@@ -205,12 +208,12 @@ sub _sock_input {
           m|(?:([^:/?#]+):)?(?://([^/?#]*))?([^?#]*)(?:\?([^#]*))?(?:#(.*))?|;
         return unless $scheme and $authority;
         $scheme = lc $scheme;
-        return unless $scheme eq 'whois';
+        return unless $scheme =~ m'r?whois';
         my ( $host, $port ) = split /:/, $authority;
         return if $host eq $self->{request}->{host};
-        $self->{_referral} = $host;
+        $self->{_referral} = $authority;
     }
-    if ( $self->{request}->{host} eq $self->{_dot_com} 
+    if ( $self->{request}->{host} eq $self->{_dot_com}
         and my ($other) = $line =~ /Whois Server:\s+(.*)\s*$/i )
     {
         $self->{_referral} = $other;
