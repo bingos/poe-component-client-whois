@@ -949,7 +949,7 @@ my %data = (
                      'whois.isnet.is'
                    ],
           '.de' => [
-                     'whois.denic.de'
+                     'de.whois-servers.net'
                    ],
           '.mh' => [
                      'NONE'

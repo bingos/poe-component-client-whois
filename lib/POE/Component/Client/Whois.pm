@@ -166,7 +166,11 @@ sub _sock_up {
         return undef;
     }
 
-    $self->{'socket'}->put( $self->{request}->{query} );
+    my $query = $self->{request}->{host} eq 'de.whois-servers.net'
+                ? join(' ', '-T dn,ace -C US-ASCII', $self->{request}->{query})
+                : $self->{request}->{query};
+
+    $self->{'socket'}->put( $query );
     $kernel->delay( '_time_out' => 30 );
     undef;
 }
