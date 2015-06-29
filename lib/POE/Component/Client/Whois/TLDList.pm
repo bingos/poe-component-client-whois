@@ -1149,11 +1149,11 @@ sub tld {
   unless ( $lookup =~ /\./ ) {
     foreach my $tld ( sort keys %{ $self->{data} } ) {
 		  return @{ $self->{data}->{ $tld } }
-        if $lookup =~ /\Q$tld\E$/;
+        if $lookup =~ /\Q$tld\E$/i;
     }
   }
   else {
-    my $query = $lookup;
+    my $query = lc $lookup;
     while ( $query ) {
       if ( exists $self->{data}->{".$query"} ) {
         return @{ $self->{data}->{".$query"} };
