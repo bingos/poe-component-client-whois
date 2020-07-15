@@ -86,6 +86,7 @@ sub whois {
 sub _start {
     my ( $kernel, $self ) = @_[ KERNEL, OBJECT ];
     $self->{_dot_com} = ( POE::Component::Client::Whois::TLDList->new()->tld('.com') )[0];
+    $self->{_dot_org} = ( POE::Component::Client::Whois::TLDList->new()->tld('.org') )[0];
     $self->{session_id} = $_[SESSION]->ID();
     $kernel->yield('_connect');
     undef;
@@ -217,7 +218,8 @@ sub _sock_input {
         return if $host eq $self->{request}->{host};
         $self->{_referral} = $authority;
     }
-    if ( $self->{request}->{host} eq $self->{_dot_com}
+    if ( ( $self->{request}->{host} eq $self->{_dot_com} or
+           $self->{request}->{host} eq $self->{_dot_org} )
         and my ($other) = $line =~ /Whois Server:\s+(.*)\s*$/i )
     {
         $self->{_referral} = $other;
